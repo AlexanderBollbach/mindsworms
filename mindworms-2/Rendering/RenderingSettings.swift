@@ -4,7 +4,7 @@ import CoreGraphics
 
 struct RenderingEnvironment {
     let context: CGContext
-    let transform: Transform
+    var transform: Transform
     let rect: CGRect
 }
 
@@ -34,22 +34,23 @@ func lowResRE() -> RenderingEnvironment {
 
 func defaultRE() -> RenderingEnvironment {
     
-    let exportSettings = ProjectSettings()
-    
+    let w = 100
+    let h = 100
+
     let context = CGContext(data: nil,
-                            width: exportSettings.canvasWidth,
-                            height: exportSettings.canvasHeight,
+                            width: w,
+                            height: h,
                             bitsPerComponent: 8,
-                            bytesPerRow: 4 * exportSettings.canvasWidth,
+                            bytesPerRow: 4 * w,
                             space: CGColorSpaceCreateDeviceRGB(),
                             bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
-    
+
     let rect = CGRect(
         x: 0,
         y: 0,
-        width: exportSettings.canvasWidth,
-        height: exportSettings.canvasHeight
+        width: w,
+        height: h
     )
-    
+
     return RenderingEnvironment(context: context, transform: Transform(), rect: rect)
 }

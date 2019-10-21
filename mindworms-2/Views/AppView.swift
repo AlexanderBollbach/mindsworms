@@ -1,5 +1,65 @@
 import SwiftUI
 
+struct CurrentProjectView: View {
+    @ObservedObject var store: Store<Project?, ProjectAction>
+    
+    var body: some View {
+        HStack {
+            TextField(
+                "project",
+                text: store.send(
+                    { $0?.name ?? "--" },
+                    { .changeName(name: $0) }
+                )
+            )
+        }.background(Color.green)
+    }
+}
+
+struct ChooseProjectView: View {
+    @ObservedObject var store: Store<[Project], ProjectsAction>
+    
+    var body: some View {
+        HStack {
+            VStack {
+                ForEach(store.value) { project in
+                    Text(project.name).onTapGesture {
+                        self.store.send(.deselectAll)
+                        self.store.send(.select(id: project.id))
+                    }
+                }
+                ItemView(title: "+") {
+                    self.store.send(.create(id: genID()))
+                }
+            }
+//            EntitiesView(
+//                store: store,
+//                empty: "no active projects"
+//            )
+        }.background(Color.green)
+    }
+}
+
+struct ProjectManagementView: View {
+    @ObservedObject var store: Store<[Project], ListAction<Project, ProjectAction, Int>>
+    @State var showModal1 = false
+    @EnvironmentObject var style: Style
+    
+    var body: some View {
+        ItemView(title: store.value.first(where: { $0.isSelected })?.name ?? "--") {
+            self.showModal1 = true
+        }
+        .sheet(isPresented: $showModal1) { self.editProjectsView.environmentObject(self.style) }
+    }
+    
+    var editProjectsView: some View {
+        VStack {
+            CurrentProjectView(store: store.view({ $0.firstActive }, { (.selected($0)) }))
+            ChooseProjectView(store: store.view({ projects in projects.filter { project in project.id != projects.firstActive?.id } }, { $0 }))
+        }
+    }
+}
+
 struct AppView: View {
     
     @EnvironmentObject var store: Store<AppState, AppAction>
@@ -7,119 +67,79 @@ struct AppView: View {
     
     var body: some View {
         VStack {
-            projectsView
+            canvasView
+            
             layersView
             effectsView
             attributesView
-            Spacer()
-        }.frame(maxWidth: .infinity).background(Color.black).onAppear(perform: self.startUp)
-    }
-
-    var projectsView: some View {
-        EntitiesView(
-            store: store.view(
-                { .init(entities: $0.activeProjects, selectedIds: $0.selectedProjects.map { $0.id }) },
-                { AppAction.projects($0) }
-            )
-        )
-    }
-
-    var layersView: some View {
-        Group {
-            if !store.value.selectedProjects.isEmpty {
-                EntitiesView(
-                    store: store.view(
-                        { .init(entities: $0.activeLayers, selectedIds: $0.selectedLayers.map { $0.id }) },
-                        { AppAction.layers($0) }
-                    )
-                )
-            } else {
-                Text("no active project")
-            }
+            
+            canvasToolsView
+            
+            ProjectManagementView(store: store.view({ $0.projects }, { .activeProjects($0) }))
         }
-    }
-
-    var effectsView: some View {
-        Group {
-            if !store.value.selectedLayers.isEmpty {
-                EntitiesView(
-                    store: store.view(
-                        { .init(entities: $0.activeEffects, selectedIds: $0.selectedEffects.map { $0.id }) },
-                        { AppAction.effects($0) }
-                    ),
-                    entityPicking: EntityPicking(choices: ["pulse", "clusters", "spin"], create: self.createEffect)
-                )
-            } else {
-                Text("no selected layers")
-            }
-        }
+        .frame(maxWidth: .infinity)
+            
+            //        .edgesIgnoringSafeArea(.all)
+            .statusBar(hidden: true)
+            .background(Color.black)
+            .onAppear(perform: self.startUp)
     }
     
     var attributesView: some View {
-        Group {
-            if !store.value.selectedEffects.isEmpty {
-                EntitiesView(
-                    store: store.view(
-                        { .init(entities: $0.activeAttributes, selectedIds: $0.selectedAttributes.map { $0.id }) },
-                        { AppAction.attributes($0) }
-                    )
-                )
-            } else {
-                Text("no selected effects")
-            }
-        }
+        AttributesView(
+            store: store.view({ $0.activeAttributes }, { .activeAttributes($0) })
+        )
     }
     
-    func createEffect(name: String) {
-        if name == "pulse" {
-            let effectId = UUID()
-            let amountId = UUID()
-            let speedId = UUID()
-            
-            let effect = Effect(id: effectId, name: "pulse", parameters: PulseParams())
-            
-            self.store.send(.effects(.insert(effect)))
-            self.store.send(.effects(.selectOnly(id: effectId)))
-            
-            self.store.send(.attributes(.insert(Attribute(id: amountId, name: "amount", value: 0.0))))
-            self.store.send(.attributes(.insert(Attribute(id: speedId, name: "speed", value: 0.0))))
-        }
-        if name == "clusters" {
-            let effectId = UUID()
-            let amountId = UUID()
-            let speedId = UUID()
-            
-            let effect = Effect(id: effectId, name: "clusters", parameters: ClusterParams())
-            
-            self.store.send(.effects(.insert(effect)))
-            self.store.send(.effects(.selectOnly(id: effectId)))
-            
-            self.store.send(.attributes(.insert(Attribute(id: amountId, name: "speed", value: 0.0))))
-            self.store.send(.attributes(.insert(Attribute(id: speedId, name: "clusters", value: 0.0))))
-        }
-        if name == "spin" {
-            let effectId = UUID()
-            let amountId = UUID()
-            let speedId = UUID()
-            
-            let effect = Effect(id: effectId, name: "spin", parameters: SpinParams())
-            
-            self.store.send(.effects(.insert(effect)))
-            self.store.send(.effects(.selectOnly(id: effectId)))
-            
-            self.store.send(.attributes(.insert(Attribute(id: amountId, name: "speed", value: 0.0))))
-        }
+    var layersView: some View {
+        LayersView(
+            store: store.view({ $0.activeLayers }, { .activeLayers($0) })
+        )
     }
- 
+    
+    var effectsView: some View {
+        EffectsView(
+            store: store.view(
+                { (effects: $0.activeEffects, presetNames: $0.presetNames) },
+                { $0.appAction }
+            )
+        )
+    }
+    
+    var canvasToolsView: some View {
+        OptionalStoreView(
+            empty: Text("no active project"),
+            content: CanvasToolsView.init,
+            store: store.view({ $0.firstActiveProject }, { .activeProjects(.selected($0)) })
+        )
+    }
+    
+    var canvasView: some View {
+        OptionalStoreView(
+            empty: Text("no active project"),
+            content: CanvasView.init,
+            store: store.view({ $0.firstActiveProject }, { $0.toAppAction })
+        )
+            .layoutPriority(1)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.green)
+    }
+    
     private func startUp() {
-        let projectId = UUID()
-        self.store.send(.projects(.create(id: projectId)))
-        self.store.send(.projects(.select(id: projectId)))
         
-        let layerId = UUID()
-        self.store.send(.layers(.create(id: layerId)))
-        self.store.send(.layers(.select(id: layerId)))
+        let l = Layer(id: 0, name: "test", color: MyColor(), isMuted: false, isSelected: true)
+        let p = Project(id: 0, name: "test", transform: Transform(), mode: .drawing, isSelected: true, layers: [l])
+        //        let w = Workspace(id: 0, projects: [p], name: "test", isSelected: true)
         
+        let es: [Effect] = EffectFunctionality.effects.enumerated().map { val in
+            let id = val.offset
+            return val.element.value.generateEffect(id)
+        }
         
+        store.send(.savePreset(name: "basic", effects: es))
+        store.send(.projects(.insert(p)))
+        store.send(.loadPreset(name: "basic"))
     }
 }
+
+

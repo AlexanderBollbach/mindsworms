@@ -1,10 +1,4 @@
-//
-//  ContentView.swift
-//  FlowLayoutST
-//
-//  Created by Chris Eidhof on 22.08.19.
-//  Copyright © 2019 Chris Eidhof. All rights reserved.
-//
+
 import SwiftUI
 
 extension CGSize {
@@ -85,7 +79,7 @@ struct CollectionView<Elements, Content>: View where Elements: RandomAccessColle
     var data: Elements
     var layout: Layout
     typealias Layout = (Elements, CGSize, [(Elements.Element.ID, CGSize)]) -> [Line<Elements.Element.ID>]
-    typealias Reorder = (_ from: Elements.Index, _ before: Elements.Index) -> ()
+    typealias Reorder = (_ from: Elements.Element.ID, _ before: Elements.Element.ID) -> ()
     var content: (Elements.Element) -> Content
     private var _onReorder: Reorder = { _, _ in () }
     @State private var sizes: [(Elements.Element.ID, CGSize)] = []
@@ -109,7 +103,6 @@ struct CollectionView<Elements, Content>: View where Elements: RandomAccessColle
         var lineY: CGFloat = 0
         for line in lines {
             lineY += line.height
-            print(position.y, line.height)
             guard position.y < lineY else { continue }
             for item in line.items {
                 let rect = item.1
@@ -140,9 +133,20 @@ struct CollectionView<Elements, Content>: View where Elements: RandomAccessColle
                                 self.dragTranslation = value.translation
                                 self.dragLocation = value.location
                             }).onEnded({ _ in
-                                if let old = self.data.firstIndex(where: { $0.id == self.selectedIndex }), let newId = cursorPos?.id, let new = self.data.firstIndex(where: { $0.id == newId }) {
-                                    self._onReorder(old, new)
+                                
+                                if let old = self.data.first(where: { $0.id == self.selectedIndex }), let newId = cursorPos?.id, let new = self.data.first(where: { $0.id == newId }) {
+                                    self._onReorder(old.id, new.id)
                                 }
+//                                if
+//                                    let old = self.data.firstIndex(where: { $0.id == self.selectedIndex }),
+//                                    let newId = cursorPos?.id,
+//                                    let new = self.data.firstIndex(where: { $0.id == newId }) {
+//
+//                                    self._onReorder(old, new)
+//
+//
+//
+//                                }
                                 self.selectedIndex = nil
                                 self.dragLocation = .zero
                             })

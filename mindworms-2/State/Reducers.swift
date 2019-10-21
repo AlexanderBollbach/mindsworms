@@ -1,148 +1,104 @@
 import Foundation
 
+
 // MARK: - app -
 
+var _idCounter = 0
+
+func genID() -> Int {
+    _idCounter += 1
+    return _idCounter
+}
+
+struct AppState {
+    var projects = [Project]()
+    var presets = [String: [Effect]]()
+}
+
 enum AppAction {
-    case projects(CrudAction<Project>)
-    case layers(CrudAction<Layer>)
-    case effects(CrudAction<Effect>)
-    case attributes(CrudAction<Attribute>)
+    case projects(ListAction<Project, ProjectAction, Int>)
+    
+    case savePreset(name: String, effects: [Effect])
+    case loadPreset(name: String)
 }
 
 func appReducer(state: inout AppState, action: AppAction) {
     switch action {
         
     case let .projects(action):
-        projectsReducer(state: &state.projects, action: action)
-        
-    case let .layers(action):
-        layersReducer(state: &state.layers, action: action)
-        
-    case let .effects(action):
-        effectsReducer(state: &state.effects, action: action)
-        
-    case let .attributes(action):
-        attributesReducer(state: &state.attributes, action: action)
-    }
-    
-    relationsReducer(state: &state, action: action)
-}
+        makeListReducer(projectReducer)(&state.projects, action)
 
-enum CrudAction<E: Identifiable> where E.ID == UUID {
-    case insert(E)
-    case create(id: UUID)
-    case remove(id: UUID)
-    case select(id: UUID)
-    case selectOnly(id: UUID)
-    case deselect(id: UUID)
-}
+    case let .savePreset(name, effects):
+        state.presets[name] = effects
 
-// MARK: - relations -
-
-func relationsReducer(state: inout AppState, action: AppAction) {
-    
-    switch action {
-    case let .projects(action):
-        
-        switch action {
-        case let .create(id):
-            state.workspaces.update(isSelected: { _ in true }) { $0.projects.connect(id) }
-        case let .select(id):
-            state.workspaces.update(isSelected: { _ in true }) { $0.projects.select(id) }
-        case let .deselect(id):
-            state.workspaces.update(isSelected: { _ in true }) { $0.projects.deselect(id) }
-        case let .remove(id):
-            state.workspaces.update(isSelected: { _ in true }) { $0.projects.disconnect(id) }
-        case let .insert(e):
-            state.workspaces.update(isSelected: { _ in true }) { $0.projects.connect(e.id) }
-        case let .selectOnly(id):
-            state.workspaces.update(isSelected: { _ in true }) { $0.projects.selectOnly(id) }
-        }
-    case let .layers(action):
-        let es = state.selectedProjects.map { $0.id }
-        func pred<E: Identifiable>(e: E) -> Bool where E.ID == UUID {
-            es.contains(e.id)
-        }
-        
-        switch action {
-        case let .create(id):
-            state.projects.update(isSelected: pred) { $0.layers.connect(id) }
-        case let .select(id):
-            state.projects.update(isSelected: pred) { $0.layers.select(id) }
-        case let .deselect(id):
-            state.projects.update(isSelected: pred) { $0.layers.deselect(id) }
-        case let .remove(id):
-            state.projects.update(isSelected: pred) { $0.layers.disconnect(id) }
-        case let .insert(e):
-            state.projects.update(isSelected: pred) { $0.layers.connect(e.id) }
-        case let .selectOnly(id):
-            state.projects.update(isSelected: pred) { $0.layers.selectOnly(id) }
-        }
-        
-    case let .effects(action):
-        let es = state.selectedLayers.map { $0.id }
-        func pred<E: Identifiable>(e: E) -> Bool where E.ID == UUID {
-            es.contains(e.id)
-        }
-        
-        switch action {
-        case let .create(id):
-            state.layers.update(isSelected: pred) { $0.effects.connect(id) }
-        case let .select(id):
-            state.layers.update(isSelected: pred) { $0.effects.select(id) }
-        case let .deselect(id):
-            state.layers.update(isSelected: pred) { $0.effects.deselect(id) }
-        case let .remove(id):
-            state.layers.update(isSelected: pred) { $0.effects.disconnect(id) }
-        case let .insert(e):
-            state.layers.update(isSelected: pred) { $0.effects.connect(e.id) }
-        case let .selectOnly(id):
-            state.layers.update(isSelected: pred) { $0.effects.selectOnly(id) }
-        }
-        
-    case let .attributes(action):
-        let es = state.selectedEffects.map { $0.id }
-        func pred<E: Identifiable>(e: E) -> Bool where E.ID == UUID {
-            es.contains(e.id)
-        }
-        
-        switch action {
-        case let .create(id):
-            state.effects.update(isSelected: pred) { $0.attributes.connect(id) }
-        case let .select(id):
-            state.effects.update(isSelected: pred) { $0.attributes.select(id) }
-        case let .deselect(id):
-            state.effects.update(isSelected: pred) { $0.attributes.deselect(id) }
-        case let .remove(id):
-            state.effects.update(isSelected: pred) { $0.attributes.disconnect(id) }
-        case let .insert(e):
-            state.effects.update(isSelected: pred) { $0.attributes.connect(e.id) }
-        case let .selectOnly(id):
-            state.effects.update(isSelected: pred) { $0.attributes.selectOnly(id) }
+    case let .loadPreset(name):
+        if let effects = state.presets[name] {
+            makeListReducer(projectReducer)(
+                &state.projects,
+                .selected(.layers(.selected(.effects(.replace(with: effects)))))
+            )
         }
     }
 }
 
 
-// MARK: - projects -
-
-func projectsReducer(state: inout [Project], action: CrudAction<Project>) {
-    switch action {
-        
-    case let .create(id):
-        state.append(Project(id: id))
-        
-    case let .remove(id):
-        state.removeAll(where: { $0.id == id })
-        
-    default:
-        break
-    }
-}
+// MARK: - workspace -
+//
+//struct Workspace: Identifiable, Creatable, Selectable, Named {
+//    let id: Int
+//    var projects: [Project] = []
+//    var name = "w"
+//    var isSelected = false
+//    
+//    static func create(id: Int) -> Workspace { Workspace(id: id) }
+//}
+//
+//enum WorkspaceAction {
+//    case changeName(String)
+//    case projects(ListAction<Project, ProjectAction, Int>)
+//}
+//
+//func workspaceReducer(state: inout Workspace, action: WorkspaceAction) {
+//    switch action {
+//    
+//    case let .changeName(val):
+//        state.name = val
+//    
+//    case let .projects(action):
+//        makeListReducer(projectsReducer)(&state.projects, action)
+//    }
+//}
 
 // MARK: - project -
 
+struct Project: Identifiable, Selectable, Creatable, Named {
+    
+    enum ProjectMode {
+        case drawing
+        case moving
+        case lasso
+        
+        mutating func toggleMoving() {
+            if self == .moving {
+                self = .drawing
+            } else {
+                self = .moving
+            }
+        }
+    }
+    
+    let id: Int
+    var name = "project"
+    var transform = Transform()
+    var mode: ProjectMode = .drawing
+    var isSelected = false
+    var layers = [Layer]()
+    
+    static func create(id: Int) -> Project { .init(id: id) }
+}
+
 enum ProjectAction {
+    case layers(ListAction<Layer, LayerAction, Int>)
     case changeName(name: String)
     case transform(TransformAction)
     case toggleMoving
@@ -150,93 +106,149 @@ enum ProjectAction {
 
 func projectReducer(state: inout Project, action: ProjectAction) {
     switch action {
-        
+    
     case let .changeName(name):
         state.name = name
-        
+    
+    case .toggleMoving:
+        state.mode.toggleMoving()
+    
     case let .transform(action):
         transformReducer(state: &state.transform, action: action)
         
-    case .toggleMoving:
-        state.mode.toggleMoving()
+    case let .layers(action):
+        makeListReducer(layerReducer)(&state.layers, action)
     }
 }
 
 
-// MARK: - layers -
 
-func layersReducer(state: inout [Layer], action: CrudAction<Layer>) {
-    switch action {
-        
-    case let .create(id):
-        state.append(Layer(id: id))
-        
-    case let .remove(id):
-        state.removeAll(where: { $0.id == id })
-        
-    default:
-        break
-    }
-}
+
 
 // MARK: - layer -
+
+struct Layer: Identifiable, Selectable, Creatable {
+    let id: Int
+    var name = "layer"
+    var color = MyColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+    var isMuted = false
+    var isSelected = false
+    var effects = [Effect]()
+    var paths = [MyPath]()
+    
+    static func create(id: Int) -> Layer { .init(id: id) }
+}
 
 enum LayerAction {
     case mute
     case unmute
+    case effects(ListAction<Effect, EffectAction, Int>)
+    case paths(ListAction<MyPath, PathAction, Int>)
 }
 
 func layerReducer(state: inout Layer, action: LayerAction) {
     switch action {
-        
+    
     case .mute:
         state.isMuted = true
-        
+    
     case .unmute:
         state.isMuted = false
+    
+    case let .effects(action):
+        makeListReducer(effectReducer)(&state.effects, action)
+        
+    case let .paths(action):
+        makeListReducer(pathReducer)(&state.paths, action)
     }
 }
 
-// MARK: - effects -
 
-func effectsReducer(state: inout [Effect], action: CrudAction<Effect>) {
-    switch action {
-        
-    case let .create(id):
-        state.append(Effect(id: id))
-        
-    case let .insert(val):
-        state.append(val)
-        
-    case let .remove(id):
-        state.removeAll(where: { $0.id == id })
-        
-    default:
-        break
+// MARK: - effect -
+
+struct Effect: Identifiable, Selectable, Creatable {
+    let id: Int
+    let name: String
+    var attributes: [Attribute]
+    var isSelected: Bool
+    
+    static func create(id: Int) -> Effect { .init(id: id) }
+    
+    init(id: Int, name: String = "e", attributes: [Attribute] = [], isSelected: Bool = false) {
+        self.id = id
+        self.name = name
+        self.attributes = attributes
+        self.isSelected = isSelected
     }
 }
 
-// MARK: - attributes -
+enum EffectAction {
+    case attributes(ListAction<Attribute, AttributeAction, Int>)
+}
 
-func attributesReducer(state: inout [Attribute], action: CrudAction<Attribute>) {
+func effectReducer(state: inout Effect, action: EffectAction) {
     switch action {
-        
-    case let .create(id):
-        state.append(Attribute(id: id))
-        
-    case let .remove(id):
-        state.removeAll(where: { $0.id == id })
-        
-    case let .insert(val):
-        state.append(val)
-        
-    default:
-        break
+    
+    case let .attributes(action):
+        makeListReducer(attributeReducer)(&state.attributes, action)
+    }
+}
+
+// MARK: - attribute -
+
+struct Attribute: Identifiable, Selectable, Creatable, Equatable {
+    let id: Int
+    let name: String
+    var value: Double
+    var isSelected: Bool
+    
+    init(id: Int, name: String = "attribute", value: Double = 0.0, isSelected: Bool = false) {
+        self.id = id
+        self.name = name
+        self.value = value
+        self.isSelected = isSelected
+    }
+    
+    static func create(id: Int) -> Attribute { .init(id: id) }
+}
+
+enum AttributeAction {
+    case changeValue(Double)
+}
+
+func attributeReducer(state: inout Attribute, action: AttributeAction) {
+    switch action {
+    
+    case let .changeValue(val):
+        state.value = val
+    }
+}
+
+extension Array where Element == Attribute {
+    func value(for name: String) -> Double? { first(where: { $0.name == name })?.value }
+}
+
+extension Attribute {
+    func updated(with value: Double) -> Attribute {
+        var a = self
+        a.value = value
+        return a
     }
 }
 
 
 // MARK: - transform -
+
+struct Transform {
+    var origin = Point(x: 0.5, y: 0.5)
+    var zoom = 1.0
+    
+    var currentZoomStart = 0.0
+    var currentProjectZoom = 0.0
+    
+    var currentTranslateStart = Point(x: 0.5, y: 0.5)
+    var currentProjectTranslate = Point(x: 0.5, y: 0.5)
+}
 
 enum TransformAction {
     case startZoom(Double)
@@ -267,124 +279,28 @@ func transformReducer(state: inout Transform, action: TransformAction) {
 }
 
 
+// MARK: - paths -
 
-
-
-
-
-
-//
-//func attributeReducer(state: inout Attribute, action: AttributeAction) {
-//    switch action {
-//
-//    case let .changeValue(val):
-//        state.value = val
-//    }
-//}
-//
-//func effectReducer(state: inout Effect, action: EffectAction) {
-//    switch action {
-//
-//    case let .attributes(action):
-//        makeListReducer(baseReducer: attributeReducer)(&state.attributes, action)}
-//}
-//
-//func pathReducer(state: inout MyPath, action: PathAction) {
-//    switch action {
-//
-//    case let .addPoint(val):
-//        state.points.append(val)
-//
-//    case .clear:
-//        state.points = []
-//    }
-//}
-
-
-
-//enum PresetAction {
-//    case addPreset
-//    case removePreset
-//    case applyPresetToSelectedLayer
-//}
-
-
-//typealias ProjectsAction = ListAction<Project, ProjectAction>
-//typealias LayersAction = ListAction<Layer, LayerAction>
-//typealias EffectsAction = ListAction<Effect, EffectAction>
-//typealias AttributesAction = ListAction<Attribute, AttributeAction>
-//typealias MyPathsAction = ListAction<MyPath, PathAction>
-
-
-
-//enum EffectAction {
-//    case attributes(AttributesAction)
-//}
-//
-//enum AttributeAction {
-//    case changeValue(Double)
-//}
-
-//
-//enum PathAction {
-//    case addPoint(Point)
-//    case clear
-//}
-//
-
-// MARK: - Selectors -
-
-
-extension AppState {
+struct MyPath: Identifiable, Creatable, Selectable {
+    let id: Int
+    var points: [Point] = []
+    var isSelected: Bool = false
     
-    var activeProjects: [Project] {
-        let ids = workspaces.flatMap { $0.projects.ids }
-        return projects.filter { ids.contains($0.id) }
-    }
-    
-    var selectedProjects: [Project] {
-        let ids = workspaces.flatMap { $0.projects.selected }
-        return projects.filter { ids.contains($0.id) }
-    }
-    
-    var activeLayers: [Layer] {
-        let ids = selectedProjects.flatMap { $0.layers.ids }
-        return layers.filter { ids.contains($0.id) }
-    }
-    
-    var selectedLayers: [Layer] {
-        let ids = selectedProjects.flatMap { $0.layers.selected }
-        return layers.filter { ids.contains($0.id) }
-    }
-    
-    var activeEffects: [Effect] {
-        let ids = selectedLayers.flatMap { $0.effects.ids }
-        return effects.filter { ids.contains($0.id) }
-    }
-    
-    var selectedEffects: [Effect] {
-        let ids = selectedLayers.flatMap { $0.effects.selected }
-        return effects.filter { ids.contains($0.id) }
-    }
-    
-    var activeAttributes: [Attribute] {
-        let ids = selectedEffects.flatMap { $0.attributes.ids }
-        return attributes.filter { ids.contains($0.id) }
-    }
-    
-    var selectedAttributes: [Attribute] {
-        let ids = selectedEffects.flatMap { $0.attributes.selected }
-        return attributes.filter { ids.contains($0.id) }
-    }
+    static func create(id: Int) -> MyPath { .init(id: id) }
 }
 
+enum PathAction {
+    case addPoint(Point)
+    case clear
+}
 
-extension Array where Element: Identifiable {
-    mutating func update(isSelected: (Element) -> Bool, f: (inout Element) -> Void) {
-        for i in 0..<count {
-            if isSelected(self[i]) {
-                f(&self[i])
-            }
-        }
+func pathReducer(state: inout MyPath, action: PathAction) {
+    switch action {
+
+    case let .addPoint(val):
+        state.points.append(val)
+
+    case .clear:
+        state.points = []
     }
 }

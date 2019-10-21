@@ -35,6 +35,29 @@ final class Store<Value, Action>: ObservableObject {
 
         return localStore
     }
+    
+    func optionalView<LocalValue, LocalAction>(
+        _ f: @escaping (Value) -> LocalValue?,
+        _ g: @escaping (LocalAction) -> Action
+    ) -> Store<LocalValue, LocalAction>? {
+        
+        if let substate = f(self.value) {
+            let localStore = Store<LocalValue, LocalAction>(
+                initialValue: substate,
+                reducer: { localValue, localAction in
+                    self.send(g(localAction))
+                    localValue = substate
+            })
+            
+            localStore.cancellable = self.$value.sink { [weak localStore] newValue in
+              localStore?.value = substate
+            }
+
+            return localStore
+        }
+        
+        return nil
+    }
 }
 
 extension Store {
@@ -53,8 +76,9 @@ extension Store {
 
 extension Store {
     public func send<LocalValue>(
-        _ action: @escaping (LocalValue) -> Action,
-        getValue: @escaping (Value) -> LocalValue
+        _ getValue: @escaping (Value) -> LocalValue,
+        _ action: @escaping (LocalValue) -> Action
+        
     ) -> Binding<LocalValue> {
         Binding(
             get: { getValue(self.value) },
