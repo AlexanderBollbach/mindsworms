@@ -95,7 +95,7 @@ extension Store {
         _ action: @escaping (LocalValue) -> Action
         
     ) -> Binding<LocalValue> {
-        Binding(
+        .init(
             get: { getValue(self.value) },
             set: { self.send(action($0)) }
         )

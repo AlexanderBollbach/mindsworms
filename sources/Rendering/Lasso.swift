@@ -1,10 +1,4 @@
-//
-//  Lasso.swift
-//  mindworms-2
-//
-//  Created by Alexander Bollbach on 10/4/19.
-//  Copyright © 2019 Alexander Bollbach. All rights reserved.
-//
+
 
 import Foundation
 import CoreGraphics

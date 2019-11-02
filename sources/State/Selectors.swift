@@ -30,6 +30,7 @@ typealias ProjectsAction = ListAction<Project, ProjectAction, Int>
 typealias LayersAction = ListAction<Layer, LayerAction, Int>
 typealias EffectsAction = ListAction<Effect, EffectAction, Int>
 typealias AttributesAction = ListAction<Attribute, AttributeAction, Int>
+typealias MyPathsAction = ListAction<MyPath, PathAction, Int>
 
 extension Layer: Titled { var title: String { "layer: \(id)" } }
 extension Effect: Titled { var title: String { name } }

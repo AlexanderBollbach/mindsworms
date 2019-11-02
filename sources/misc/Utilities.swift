@@ -1,10 +1,4 @@
-//
-//  Utilities.swift
-//  mindworms-2
-//
-//  Created by Alexander Bollbach on 9/21/19.
-//  Copyright © 2019 Alexander Bollbach. All rights reserved.
-//
+
 
 import UIKit
 

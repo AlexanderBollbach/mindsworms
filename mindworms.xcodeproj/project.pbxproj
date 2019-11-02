@@ -14,7 +14,6 @@
 		293603E1234A59520056A894 /* Components.swift in Sources */ = {isa = PBXBuildFile; fileRef = 293603E0234A59520056A894 /* Components.swift */; };
 		29A20E16231E052C0060E63D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A20E15231E052C0060E63D /* AppDelegate.swift */; };
 		29A20E18231E052C0060E63D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A20E17231E052C0060E63D /* SceneDelegate.swift */; };
-		29A20E1A231E052C0060E63D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A20E19231E052C0060E63D /* ContentView.swift */; };
 		29AC18BD23369ACD00E380E4 /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AC18BC23369ACD00E380E4 /* State.swift */; };
 		29AC18E02336D1A000E380E4 /* Rendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AC18DF2336D1A000E380E4 /* Rendering.swift */; };
 		29AC18E22336D1DE00E380E4 /* RenderingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AC18E12336D1DE00E380E4 /* RenderingSettings.swift */; };
@@ -30,6 +29,17 @@
 		29AC1928233F9C5200E380E4 /* LassoAlgo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AC1927233F9C5200E380E4 /* LassoAlgo.swift */; };
 		29CEF62423502BDB0042D535 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CEF62323502BDB0042D535 /* FlowLayout.swift */; };
 		29CEF62A235380A00042D535 /* ListHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CEF629235380A00042D535 /* ListHandling.swift */; };
+		29D3565F236D1A7700927FE9 /* ListReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D3565E236D1A7700927FE9 /* ListReducer.swift */; };
+		29D35661236D1D6200927FE9 /* UndoReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35660236D1D6200927FE9 /* UndoReducer.swift */; };
+		29D35663236D1DBC00927FE9 /* LayerReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35662236D1DBC00927FE9 /* LayerReducer.swift */; };
+		29D35665236D1E0D00927FE9 /* EffectsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35664236D1E0D00927FE9 /* EffectsReducer.swift */; };
+		29D35667236D1E3600927FE9 /* AttributeReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35666236D1E3600927FE9 /* AttributeReducer.swift */; };
+		29D35669236D1E5F00927FE9 /* TransformReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35668236D1E5F00927FE9 /* TransformReducer.swift */; };
+		29D3566B236D1E6C00927FE9 /* PathReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D3566A236D1E6C00927FE9 /* PathReducer.swift */; };
+		29D3566D236D1E8200927FE9 /* ProjectReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D3566C236D1E8200927FE9 /* ProjectReducer.swift */; };
+		29D3566F236D1E9B00927FE9 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D3566E236D1E9B00927FE9 /* AppReducer.swift */; };
+		29D35671236D1EBD00927FE9 /* PresetsReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35670236D1EBD00927FE9 /* PresetsReducer.swift */; };
+		29D35673236D1EE300927FE9 /* Ids.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D35672236D1EE300927FE9 /* Ids.swift */; };
 		29DB83A22326EB270025D9DB /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29DB83A12326EB270025D9DB /* Store.swift */; };
 		29F245DA235FE668003D293B /* Panes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F245D9235FE668003D293B /* Panes.swift */; };
 		29F245DC235FF9FB003D293B /* ProjectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F245DB235FF9FB003D293B /* ProjectView.swift */; };
@@ -41,6 +51,7 @@
 		29F245EC23653E08003D293B /* AttributesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F245EB23653E08003D293B /* AttributesView.swift */; };
 		29F245EE2365496C003D293B /* EntityList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F245ED2365496C003D293B /* EntityList.swift */; };
 		29F245F623666355003D293B /* CanvasActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F245F523666355003D293B /* CanvasActionsView.swift */; };
+		29F5ABFC236DDCD300F379A0 /* LayersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29F5ABFB236DDCD300F379A0 /* LayersView.swift */; };
 		29FE79A223550E9800822740 /* VideoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FE79A123550E9800822740 /* VideoExporter.swift */; };
 		29FE79EC235BA06800822740 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FE79EB235BA06800822740 /* Array.swift */; };
 		29FE79EE235BA08200822740 /* Selectors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29FE79ED235BA08200822740 /* Selectors.swift */; };
@@ -56,7 +67,6 @@
 		29A20E12231E052C0060E63D /* mindworms.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mindworms.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		29A20E15231E052C0060E63D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		29A20E17231E052C0060E63D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		29A20E19231E052C0060E63D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		29A20E23231E052D0060E63D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		29AC18BC23369ACD00E380E4 /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		29AC18DF2336D1A000E380E4 /* Rendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rendering.swift; sourceTree = "<group>"; };
@@ -73,6 +83,17 @@
 		29AC1927233F9C5200E380E4 /* LassoAlgo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LassoAlgo.swift; sourceTree = "<group>"; };
 		29CEF62323502BDB0042D535 /* FlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
 		29CEF629235380A00042D535 /* ListHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListHandling.swift; sourceTree = "<group>"; };
+		29D3565E236D1A7700927FE9 /* ListReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ListReducer.swift; path = ../../../../../../Documents/ListReducer.swift; sourceTree = "<group>"; };
+		29D35660236D1D6200927FE9 /* UndoReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = UndoReducer.swift; path = ../../../../../../Documents/UndoReducer.swift; sourceTree = "<group>"; };
+		29D35662236D1DBC00927FE9 /* LayerReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayerReducer.swift; sourceTree = "<group>"; };
+		29D35664236D1E0D00927FE9 /* EffectsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EffectsReducer.swift; sourceTree = "<group>"; };
+		29D35666236D1E3600927FE9 /* AttributeReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributeReducer.swift; sourceTree = "<group>"; };
+		29D35668236D1E5F00927FE9 /* TransformReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransformReducer.swift; sourceTree = "<group>"; };
+		29D3566A236D1E6C00927FE9 /* PathReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathReducer.swift; sourceTree = "<group>"; };
+		29D3566C236D1E8200927FE9 /* ProjectReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectReducer.swift; sourceTree = "<group>"; };
+		29D3566E236D1E9B00927FE9 /* AppReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
+		29D35670236D1EBD00927FE9 /* PresetsReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresetsReducer.swift; sourceTree = "<group>"; };
+		29D35672236D1EE300927FE9 /* Ids.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ids.swift; sourceTree = "<group>"; };
 		29DB83A12326EB270025D9DB /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		29F245D9235FE668003D293B /* Panes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Panes.swift; sourceTree = "<group>"; };
 		29F245DB235FF9FB003D293B /* ProjectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectView.swift; sourceTree = "<group>"; };
@@ -85,6 +106,7 @@
 		29F245ED2365496C003D293B /* EntityList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityList.swift; sourceTree = "<group>"; };
 		29F245F123655511003D293B /* left-arrow-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left-arrow-2.png"; sourceTree = "<group>"; };
 		29F245F523666355003D293B /* CanvasActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasActionsView.swift; sourceTree = "<group>"; };
+		29F5ABFB236DDCD300F379A0 /* LayersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayersView.swift; sourceTree = "<group>"; };
 		29FE79A123550E9800822740 /* VideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoExporter.swift; sourceTree = "<group>"; };
 		29FE79EB235BA06800822740 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		29FE79ED235BA08200822740 /* Selectors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Selectors.swift; sourceTree = "<group>"; };
@@ -121,6 +143,7 @@
 		29A20E14231E052C0060E63D /* sources */ = {
 			isa = PBXGroup;
 			children = (
+				29DB83A12326EB270025D9DB /* Store.swift */,
 				29F245F123655511003D293B /* left-arrow-2.png */,
 				29AC18F02336D72400E380E4 /* misc */,
 				29AC18DE2336D19900E380E4 /* Rendering */,
@@ -169,7 +192,6 @@
 		29DB83A32326FFD10025D9DB /* setup */ = {
 			isa = PBXGroup;
 			children = (
-				29A20E19231E052C0060E63D /* ContentView.swift */,
 				29A20E23231E052D0060E63D /* Info.plist */,
 				29A20E17231E052C0060E63D /* SceneDelegate.swift */,
 				29A20E15231E052C0060E63D /* AppDelegate.swift */,
@@ -195,6 +217,7 @@
 				29F245E12364C9AB003D293B /* GridView.swift */,
 				29F245DF2362A16F003D293B /* CommandsView.swift */,
 				29F245ED2365496C003D293B /* EntityList.swift */,
+				29F5ABFB236DDCD300F379A0 /* LayersView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -202,13 +225,23 @@
 		29DB83B1232704740025D9DB /* State */ = {
 			isa = PBXGroup;
 			children = (
-				29DB83A12326EB270025D9DB /* Store.swift */,
 				29AC18BC23369ACD00E380E4 /* State.swift */,
 				29CEF629235380A00042D535 /* ListHandling.swift */,
 				29FE79EB235BA06800822740 /* Array.swift */,
 				29FE79ED235BA08200822740 /* Selectors.swift */,
 				29FE79EF235BB5C900822740 /* DrawingTypes.swift */,
 				292C080C235CF03B00937483 /* EffectFunctionality.swift */,
+				29D3565E236D1A7700927FE9 /* ListReducer.swift */,
+				29D35660236D1D6200927FE9 /* UndoReducer.swift */,
+				29D35662236D1DBC00927FE9 /* LayerReducer.swift */,
+				29D35664236D1E0D00927FE9 /* EffectsReducer.swift */,
+				29D35666236D1E3600927FE9 /* AttributeReducer.swift */,
+				29D35668236D1E5F00927FE9 /* TransformReducer.swift */,
+				29D3566A236D1E6C00927FE9 /* PathReducer.swift */,
+				29D3566C236D1E8200927FE9 /* ProjectReducer.swift */,
+				29D3566E236D1E9B00927FE9 /* AppReducer.swift */,
+				29D35670236D1EBD00927FE9 /* PresetsReducer.swift */,
+				29D35672236D1EE300927FE9 /* Ids.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -286,11 +319,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				29F245E823653A8F003D293B /* SelectView.swift in Sources */,
+				29D35673236D1EE300927FE9 /* Ids.swift in Sources */,
 				29FE79EC235BA06800822740 /* Array.swift in Sources */,
+				29D3566D236D1E8200927FE9 /* ProjectReducer.swift in Sources */,
+				29D35667236D1E3600927FE9 /* AttributeReducer.swift in Sources */,
 				29AC1925233F05DE00E380E4 /* LayerActionsView.swift in Sources */,
 				29DB83A22326EB270025D9DB /* Store.swift in Sources */,
 				29F245E22364C9AB003D293B /* GridView.swift in Sources */,
 				29A20E16231E052C0060E63D /* AppDelegate.swift in Sources */,
+				29D3566F236D1E9B00927FE9 /* AppReducer.swift in Sources */,
+				29F5ABFC236DDCD300F379A0 /* LayersView.swift in Sources */,
 				292C080D235CF03B00937483 /* EffectFunctionality.swift in Sources */,
 				29AC18E82336D57E00E380E4 /* ProjectRenderingView.swift in Sources */,
 				29A20E18231E052C0060E63D /* SceneDelegate.swift in Sources */,
@@ -300,29 +338,35 @@
 				29FE79F0235BB5C900822740 /* DrawingTypes.swift in Sources */,
 				29F245DE236150A0003D293B /* Style.swift in Sources */,
 				29AC18F22336D72D00E380E4 /* Extensions.swift in Sources */,
-				29A20E1A231E052C0060E63D /* ContentView.swift in Sources */,
 				29CEF62A235380A00042D535 /* ListHandling.swift in Sources */,
 				29F245EC23653E08003D293B /* AttributesView.swift in Sources */,
 				29AC18EF2336D70000E380E4 /* CanvasView.swift in Sources */,
 				29AC18EC2336D62500E380E4 /* ViewUpdator.swift in Sources */,
+				29D35663236D1DBC00927FE9 /* LayerReducer.swift in Sources */,
+				29D35665236D1E0D00927FE9 /* EffectsReducer.swift in Sources */,
+				29D35661236D1D6200927FE9 /* UndoReducer.swift in Sources */,
 				29AC18E22336D1DE00E380E4 /* RenderingSettings.swift in Sources */,
 				293603E1234A59520056A894 /* Components.swift in Sources */,
 				29AC1928233F9C5200E380E4 /* LassoAlgo.swift in Sources */,
 				29AC18E02336D1A000E380E4 /* Rendering.swift in Sources */,
 				29FE79EE235BA08200822740 /* Selectors.swift in Sources */,
+				29D3566B236D1E6C00927FE9 /* PathReducer.swift in Sources */,
 				2907D40B2348305200864F68 /* Effects.swift in Sources */,
 				29AC18EA2336D60400E380E4 /* AnimatedFrameView.swift in Sources */,
 				2907D406234780F500864F68 /* Lasso.swift in Sources */,
 				29F245DA235FE668003D293B /* Panes.swift in Sources */,
 				29AC18BD23369ACD00E380E4 /* State.swift in Sources */,
 				29F245EE2365496C003D293B /* EntityList.swift in Sources */,
+				29D35669236D1E5F00927FE9 /* TransformReducer.swift in Sources */,
 				29FE79A223550E9800822740 /* VideoExporter.swift in Sources */,
 				29CEF62423502BDB0042D535 /* FlowLayout.swift in Sources */,
+				29D3565F236D1A7700927FE9 /* ListReducer.swift in Sources */,
 				29F245E02362A16F003D293B /* CommandsView.swift in Sources */,
 				29AC18FD2337E56400E380E4 /* AppView.swift in Sources */,
 				29F245DC235FF9FB003D293B /* ProjectView.swift in Sources */,
 				29F245F623666355003D293B /* CanvasActionsView.swift in Sources */,
 				29AC18F82337314900E380E4 /* EffectActionsView.swift in Sources */,
+				29D35671236D1EBD00927FE9 /* PresetsReducer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -459,7 +503,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alex.mindworms-2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alex.mindworms;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -481,7 +525,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alex.mindworms-2";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alex.mindworms;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

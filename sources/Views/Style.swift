@@ -22,7 +22,7 @@ struct Colors {
 
 struct Fonts {
      let title = Font.system(size: 22)
-     let heading = UIFont.systemFont(ofSize: 24)
+     let heading = Font.system(size: 29)
      let subheading = UIFont.systemFont(ofSize: 20)
      let body = Font.system(size: 16)
      let small = UIFont.systemFont(ofSize: 11)
@@ -131,7 +131,14 @@ struct ButtonStyleText2: ButtonStyle {
 }
 
 
-
+struct HeadingLabel: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(style.spacing.small)
+            .foregroundColor(style.colors.lightest)
+            .font(style.fonts.heading)
+    }
+}
 
 struct PrimaryLabel: ViewModifier {
     func body(content: Content) -> some View {

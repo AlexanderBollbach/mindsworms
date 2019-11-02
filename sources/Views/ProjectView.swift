@@ -24,7 +24,9 @@ struct CurrentProjectView: View {
     }
     
     private func showEditProject() {
-        modal.present(EditProjectView(store: self.store.view({ $0.selected.first }, { .selected($0) })))
+        modal.present(
+            EditProjectView(store: self.store.view({ $0.selected.first }, { .selected($0) }))
+        )
     }
     
     private func showOptions() {
@@ -89,8 +91,10 @@ struct EditProjectView: View {
     }
     
     func view(project: Project) -> some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .center) {
             
+            Spacer()
+                .layoutPriority(1)
             TextField(
                 "project",
                 text: store.send(
@@ -104,18 +108,23 @@ struct EditProjectView: View {
                 amount: project.settings.width,
                 update: { self.store.send(.settings(.updateWidth(val: $0))) }
             )
+            .layoutPriority(-1)
             
             MySlider(
                 title: "height",
                 amount: project.settings.height,
                 update: { self.store.send(.settings(.updateHeight(val: $0))) }
             )
+                .layoutPriority(-1)
             
-            Spacer().layoutPriority(1)
+//            Spacer().layoutPriority(1)
             
-            Button(action: { self.modalPresenter.dismiss() }) {
-                Text("Done")
-            }.buttonStyle(ButtonStyleText2())
+//            Button(action: { self.modalPresenter.dismiss() }) {
+//                Text("Done")
+//            }.buttonStyle(ButtonStyleText2())
+            
+            Spacer()
+            .layoutPriority(1)
         }
         .padding(style.spacing.medium)
     }

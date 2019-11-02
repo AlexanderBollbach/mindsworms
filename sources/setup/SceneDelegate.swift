@@ -36,25 +36,25 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             let window = UIWindow(windowScene: windowScene)
             
 //
-//            let store = Store(initialValue: AppState(), reducer: appReducer)
+            let store = Store(initialValue: AppState(), reducer: appReducer)
 //            
-//            let l = Layer(id: 0, name: "test", color: MyColor(), isSoloed: false, isSelected: true)
-//            let p = Project(id: 0, name: "test", transform: Transform(), mode: .drawing, isSelected: true, layers: [l])
+            let l = Layer(id: 0, name: "test", color: MyColor(), isSoloed: false, isSelected: true)
+            let p = Project(id: 0, name: "test", transform: Transform(), mode: .drawing, isSelected: true, layers: [l])
 //
-////            store.send(.insert(p))
+            store.send(.projects(.insert(p)))
 //            
 //            store.send(.loadProjects)
 //     
-//            window.rootViewController = UIHostingController(
-//                rootView: ZStack {
-//                    Color.clear
-//                        .layoutPriority(1)
-//                        .background(style.colors.mainBG)
-//                        .edgesIgnoringSafeArea(.all)
-//                    AppView().environmentObject(store).environmentObject(ModalPresenter()).environment(\.colorScheme, .light)
-//                }
-//                .statusBar(hidden: true)
-//            )
+            window.rootViewController = UIHostingController(
+                rootView: ZStack {
+                    Color.clear
+                        .layoutPriority(1)
+                        .background(style.colors.mainBG)
+                        .edgesIgnoringSafeArea(.all)
+                    AppView().environmentObject(store).environmentObject(ModalPresenter()).environment(\.colorScheme, .light)
+                }
+                .statusBar(hidden: true)
+            )
             
             self.window = window
             window.makeKeyAndVisible()
